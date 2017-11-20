@@ -209,7 +209,7 @@ def invoke_localsolver_using_lsp_file(app_session, input_file_name):
     for item in app_session.data_set.query(KnapsackItem).all():
         item.in_knapsack = False  # Reset solution
 
-    lsp_file_path = pkg_resources.resource_filename('app', 'knapsack.lsp')
+    lsp_file_path = pkg_resources.resource_filename('app', 'solver.lsp')
     print('invoking local solver', lsp_file_path)
     solution_file_name = 'output.txt'
     solution_file_path = app_session.get_file_path_in_local_data_set_dir(solution_file_name)

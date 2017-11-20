@@ -1,7 +1,7 @@
-/********** knapsack.lsp **********/
+/********** solver.lsp **********/
 
 function input() {
-    usage = "\nUsage: localsolver knapsack.lsp "
+    usage = "\nUsage: localsolver solver.lsp "
         + "inFileName=inputFile [solFileName=outputFile] [lsTimeLimit=timeLimit]\n";
 
     if (inFileName == nil) error(usage);

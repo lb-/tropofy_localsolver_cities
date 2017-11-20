@@ -10,6 +10,8 @@ from tropofy.database.tropofy_orm import DataSetMixin
 from tropofy.widgets import Chart, ExecuteFunction, ParameterForm, SimpleGrid
 
 
+# Models
+
 class KnapsackItem(DataSetMixin):
     name = Column(Text, nullable=False)
     weight = Column(Integer, nullable=False)
@@ -62,6 +64,16 @@ class City(DataSetMixin):
     def get_ordered_list_of_all_items(cls, data_set):
         return data_set.query(cls).order_by(cls.id).all()
 
+
+class Preferences(DataSetMixin):
+    priority_coffee = Column(Integer, nullable=False)
+    priority_holiday = Column(Integer, nullable=False)
+    priority_working = Column(Integer, nullable=False)
+    places_to_visit = Column(Integer, nullable=False)
+    budget_per_day = Column(Integer, nullable=False)
+
+
+# Widgets
 
 class ExecuteLocalSolver(ExecuteFunction):
     def get_button_text(self, app_session):

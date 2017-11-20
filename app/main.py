@@ -1,43 +1,13 @@
-"""
-Authors: www.tropofy.com
-
-Copyright 2015 Tropofy Pty Ltd, all rights reserved.
-
-This source file is part of Tropofy and governed by the Tropofy terms of service
-available at: http://www.tropofy.com/terms_of_service.html
-
-The LocalSolver example this app is based on can be found at
-http://www.localsolver.com/exampletour.html?file=knapsack.zip
-
-Used with permission.
-
-This source file is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
-
-
-Problem Description:
-"The knapsack problem is defined as follows: given a set of items, each with a
-weight and a value, determine a subset of items in such a way that their total
-weight is less than a given bound and their total value is as large as possible.
-This problem is hard to solve in theory.
-
-Note that the way to model is exactly the same than in integer programming:
-for each item, a 0-1 decision variable is defined which is equal to 1 if the
-item belongs to the knapsack and 0 otherwise.
-
-Knapsack instances involving 1 million objects can be tackled using LocalSolver."
-[http://www.localsolver.com/exampletour.html?file=knapsack.zip]
-"""
-
 import subprocess
+
 import pkg_resources
-from sqlalchemy.types import Integer, Text, Boolean
+
 from sqlalchemy.schema import Column
+from sqlalchemy.types import Boolean, Integer, Text
 
 from tropofy.app import AppWithDataSets, Parameter, Step, StepGroup
-from tropofy.widgets import ExecuteFunction, SimpleGrid, Chart, ParameterForm
 from tropofy.database.tropofy_orm import DataSetMixin
+from tropofy.widgets import Chart, ExecuteFunction, ParameterForm, SimpleGrid
 
 
 class KnapsackItem(DataSetMixin):

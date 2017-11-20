@@ -77,7 +77,7 @@ class Preferences(DataSetMixin):
 
 class ExecuteLocalSolver(ExecuteFunction):
     def get_button_text(self, app_session):
-        return "Solve Knapsack Problem"
+        return "Make Priority From Wishlit"
 
     def execute_function(self, app_session):
         call_local_solver(app_session)

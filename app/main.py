@@ -27,6 +27,42 @@ class KnapsackItem(DataSetMixin):
         return data_set.query(cls).order_by(cls.id).all()
 
 
+class City(DataSetMixin):
+    name = Column(Text, nullable=False)
+    country = Column(Text, nullable=False)
+
+    # rankings (weights)
+    rank_coffee = Column(Integer, nullable=False)
+    rank_holiday = Column(Integer, nullable=False)
+    rank_working = Column(Integer, nullable=False)
+
+    # costs
+    acommodation_cost_per_day = Column(Integer, nullable=False)
+    living_cost_per_day = Column(Integer, nullable=False)
+
+    # easily remove places not wanting to visit
+    in_wishlist = Column(Boolean, nullable=False)
+
+    def __init__(
+            self, name, country, rank_coffee, rank_holiday, rank_working,
+            acommodation_cost_per_day, living_cost_per_day, in_wishlist=True):
+        self.name = name
+        self.country = country
+
+        self.rank_coffee = rank_coffee
+        self.rank_holiday = rank_holiday
+        self.rank_working = rank_working
+
+        self.acommodation_cost_per_day = acommodation_cost_per_day
+        self.living_cost_per_day = living_cost_per_day
+
+        self.in_wishlist = in_wishlist
+
+    @classmethod
+    def get_ordered_list_of_all_items(cls, data_set):
+        return data_set.query(cls).order_by(cls.id).all()
+
+
 class ExecuteLocalSolver(ExecuteFunction):
     def get_button_text(self, app_session):
         return "Solve Knapsack Problem"

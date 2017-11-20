@@ -1,0 +1,2 @@
+recursive-include te_ls_knapsack *.lsp
+recursive-include te_ls_knapsack/static *

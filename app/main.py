@@ -95,12 +95,12 @@ class KnapsackAllocationWeightPieChart(Chart):
         return {'title': 'Knapsack Value: {value}. Weight used: {weight} / {max}'.format(value=ks_value, weight=ks_weight, max=app_session.data_set.get_param('max_weight'))}
 
 
-class LocalSolverApplication(AppWithDataSets):
+class Application(AppWithDataSets):
     def get_name(self):
-        return 'LocalSolver Knapsack Optimiser'
+        return 'App'
 
     def get_static_content_path(self, app_session):
-        return pkg_resources.resource_filename('te_ls_knapsack', 'static')
+        return pkg_resources.resource_filename('app', 'static')
 
     def get_gui(self):
         step_group1 = StepGroup(name='Enter your Data')
@@ -186,8 +186,10 @@ def call_local_solver(app_session):
 
 def write_localsolver_input_file(app_session):
     input_file_name = 'input.in'
+
     input_file_path = app_session.get_file_path_in_local_data_set_dir(input_file_name)
     f = open(input_file_path, 'w')
+    print('write_localsolver_input_file', input_file_path, f)
 
     items = KnapsackItem.get_ordered_list_of_all_items(app_session.data_set)
     weights = [str(item.weight) for item in items]
@@ -207,15 +209,18 @@ def invoke_localsolver_using_lsp_file(app_session, input_file_name):
     for item in app_session.data_set.query(KnapsackItem).all():
         item.in_knapsack = False  # Reset solution
 
-    lsp_file_path = pkg_resources.resource_filename('te_ls_knapsack', 'knapsack.lsp')
+    lsp_file_path = pkg_resources.resource_filename('app', 'knapsack.lsp')
+    print('invoking local solver', lsp_file_path)
     solution_file_name = 'output.txt'
     solution_file_path = app_session.get_file_path_in_local_data_set_dir(solution_file_name)
     open(solution_file_path, 'w').close()  # clear the solution file if it exists
+    print('command', ["localsolver", lsp_file_path, "inFileName=%s" % input_file_name, "solFileName=%s" % solution_file_name, "lsTimeLimit=2"])
     p = subprocess.Popen(
         ["localsolver", lsp_file_path, "inFileName=%s" % input_file_name, "solFileName=%s" % solution_file_name, "lsTimeLimit=2"],
         cwd=app_session.local_data_set_dir,
         stdout=subprocess.PIPE
     )
+    print('subprocess', p, input_file_name, output_filename)
     out, _ = p.communicate()
     with open(solution_file_path) as f:
         content = f.readlines()

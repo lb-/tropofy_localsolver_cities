@@ -12,7 +12,7 @@ apps_config = {
     },
     'apps': [
         {
-            'module': 'main',
+            'module': 'app',
             'classname': 'Application',
             'config': {
                 'key.public': keys.public,

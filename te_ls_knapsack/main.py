@@ -95,7 +95,7 @@ class KnapsackAllocationWeightPieChart(Chart):
         return {'title': 'Knapsack Value: {value}. Weight used: {weight} / {max}'.format(value=ks_value, weight=ks_weight, max=app_session.data_set.get_param('max_weight'))}
 
 
-class LocalSolverKnapsackOptimiser(AppWithDataSets):
+class LocalSolverApplication(AppWithDataSets):
     def get_name(self):
         return 'LocalSolver Knapsack Optimiser'
 
@@ -212,7 +212,7 @@ def invoke_localsolver_using_lsp_file(app_session, input_file_name):
     solution_file_path = app_session.get_file_path_in_local_data_set_dir(solution_file_name)
     open(solution_file_path, 'w').close()  # clear the solution file if it exists
     p = subprocess.Popen(
-        ["localsolver", lsp_file_path, "inFileName=%s" % input_file_name, "solFileName=%s" % solution_file_name, "lsTimeLimit=2"], 
+        ["localsolver", lsp_file_path, "inFileName=%s" % input_file_name, "solFileName=%s" % solution_file_name, "lsTimeLimit=2"],
         cwd=app_session.local_data_set_dir,
         stdout=subprocess.PIPE
     )

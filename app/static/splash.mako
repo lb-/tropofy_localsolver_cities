@@ -1,25 +1,24 @@
 <%inherit file="splash_base.mako" />
 
 <%block name="additional_css">
-    .faq li {
-        margin:10px 0;
-    }
+  .faq li {
+    margin:10px 0;
+  }
 
-    .polymathian {
-        margin:30px 0;
-    }
+  .polymathian {
+    margin:30px 0;
+  }
 </%block>
 
-<%block name="header_title">Knapsack Optimiser</%block>
+<%block name="header_title">Prioritise Your City Wish List</%block>
 
 <%block name="app_description">
-    <p>This app solves the well known Knapsack problem. It is defined as follows:</p>
+    <p>This app solves the problem of working out which Cities to visit.</p>
     <ul>
-        <li>Given a set of items with weights and values.</li>
-        <li>And a 'knapsack' that can hold a certain weight.</li>
-        <li>Allocate items to the knapsack, such that the value of the items contained within is maximised.</li>
+        <li>Enter your list of potential cities with ranks for really important things like how good it is to work or holiday there.</li>
+        <li>Enter the average daily spend of each city, you can use something like <a href="https://nomadlist.com/" target="_blank">Nomadlist</a> to get amounts.</li>
+        <li>Enter your priorities and desired average daily budget and click solve to get a refined list.</li>
     </ul>
-    <p>Need help or wish this app had more features? Contact us at <b>info@tropofy.com</b> to see if we can help.</p>
 </%block>
 
 ## Body

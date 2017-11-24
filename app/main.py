@@ -1,3 +1,4 @@
+import csv
 import subprocess
 
 import pkg_resources
@@ -61,15 +62,24 @@ class Preferences(DataSetMixin):
 
 # Loading Data
 
-def load_data_set_cities(app_session):
-    app_session.data_set.add_all([
-        City(name='Brisbane', country='Australia', rank_coffee=90,
-             rank_holiday=50, rank_working=70, cost_per_day=130.00,
-             latitude=42.000, longitude=153.000),
-        City(name='Sydney', country='Australia', rank_coffee=90,
-             rank_holiday=60, rank_working=70, cost_per_day=150.00,
-             latitude=42.000, longitude=153.000),
-    ])
+def load_data_set_example(app_session):
+    data = []
+
+    with open('./app/example.csv') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            # basic conversion of floats and integers from csv
+            cleaned_row = dict()
+            for key, value in row.iteritems():
+                try:
+                    cleaned_row[key] = int(value)
+                except ValueError:
+                    try:
+                        cleaned_row[key] = float(value)
+                    except ValueError:
+                        cleaned_row[key] = value
+            data.append(City(**cleaned_row))
+        app_session.data_set.add_all(data)
 
 
 # Widgets
@@ -166,7 +176,7 @@ class Application(AppWithDataSets):
 
     def get_examples(self):
         return {
-            'Demo - LB 2017 Cities': load_data_set_cities,
+            'Example - LB 2017 Cities': load_data_set_example,
         }
 
     def get_parameters(self):

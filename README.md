@@ -6,6 +6,9 @@ Purpose is to generate a customised wish-list of cities, based on user's prefere
 
 Built with https://tropofy.com/
 
+This app showcases:
+* Loading example data from csv
+
 # Developing
 
 1. Activate the Virtual Environment

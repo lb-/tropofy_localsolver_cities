@@ -9,7 +9,7 @@ Built with https://tropofy.com/
 # Developing
 
 1. Activate the Virtual Environment
-  `$ source tropofy_env/bin/activate`
+  `$ source ../tropofy_env/bin/activate`
 
 2. Launch the application from the root project directory
   `$ python run.py`
@@ -31,3 +31,11 @@ Built with https://tropofy.com/
 
 3. Configure app and install dependencies from the root project directory
   `$ python setup.py develop`
+
+
+# Helpful Links
+
+* sqlalchemy docs (version 0.8 in use, but 0.9 docs only available)
+  * http://docs.sqlalchemy.org/en/rel_0_9/
+* Mako - templating language
+  * http://www.makotemplates.org/

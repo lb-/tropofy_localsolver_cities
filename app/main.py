@@ -30,18 +30,18 @@ class KnapsackItem(DataSetMixin):
 
 
 class City(DataSetMixin):
-    name = Column('City Name', Text, nullable=False)
-    country = Column('Country', Text, nullable=False)
-    latitude = Column('Latitude', Float)
-    longitude = Column('Longitude', Float)
+    name = Column(Text, nullable=False)
+    country = Column(Text, nullable=False)
+    latitude = Column(Float)
+    longitude = Column(Float)
 
     # rankings (weights)
-    rank_coffee = Column('Coffee Rank', Integer, nullable=False)
-    rank_holiday = Column('Holiday Rank', Integer, nullable=False)
-    rank_working = Column('Working Rank', Integer, nullable=False)
+    rank_coffee = Column(Integer, nullable=False)
+    rank_holiday = Column(Integer, nullable=False)
+    rank_working = Column(Integer, nullable=False)
 
     # costs
-    cost_per_day = Column('Cost per day', Float, nullable=False)
+    cost_per_day = Column(Float, nullable=False)
 
     # easily remove places not wanting to visit
     # in_wishlist = Column(Boolean, nullable=False)

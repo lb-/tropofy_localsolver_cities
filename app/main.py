@@ -8,7 +8,7 @@ from sqlalchemy.types import Boolean, Float, Integer, Text
 
 from tropofy.app import AppWithDataSets, Parameter, Step, StepGroup
 from tropofy.database.tropofy_orm import DataSetMixin
-from tropofy.widgets import Chart, ExecuteFunction, ParameterForm, SimpleGrid
+from tropofy.widgets import Chart, CustomWidget, ExecuteFunction, ParameterForm, SimpleGrid
 
 
 # Models
@@ -135,6 +135,29 @@ class KnapsackAllocationWeightPieChart(Chart):
         return {'title': title}
 
 
+class GoogleMapsWidget(CustomWidget):
+    def serialise(self, app_session):
+        # https://docs.tropofy.com/narrative/customisation.html#example
+        print('generating mapps widget')
+        return {
+            "js": "google-maps-widget.js",
+            "html": "google-maps-widget.html"
+            # custom keys are passed to params.spec in JS
+        }
+
+
+# Helper Functions
+
+def generate_ui_step_group(name, steps):
+    step_group = StepGroup(name=name)
+    for step in steps:
+        # each step should be a tuple with the name and an array of widgets
+        step_group.add_step(Step(name=step[0], widgets=step[1]))
+    return step_group
+
+
+# Main Application
+
 class Application(AppWithDataSets):
     def get_name(self):
         return 'App'
@@ -143,36 +166,36 @@ class Application(AppWithDataSets):
         return pkg_resources.resource_filename('app', 'static')
 
     def get_gui(self):
-        step_group1 = StepGroup(name='Enter your Data')
-        step_group1.add_step(
-            Step(name='Cities', widgets=[SimpleGrid(City)]))
-        step_group1.add_step(
-            Step(name='Knapsack Items', widgets=[SimpleGrid(KnapsackItem)]))
-        step_group1.add_step(Step(
-            name='Knapsack Weight',
-            widgets=[{"widget": ParameterForm(), "cols": 6}],
-        ))
-
-        step_group2 = StepGroup(name='Solve')
-        step_group2.add_step(
-            Step(
-                name='Solve Knapsack Problem using LocalSolver',
-                widgets=[ExecuteLocalSolver()]
+        step_groups = []
+        step_groups.append(
+            generate_ui_step_group(
+                'Enter Your Data', [('Cities', [SimpleGrid(City)])]
             )
         )
-
-        step_group3 = StepGroup(name='View the Solution')
-        step_group3.add_step(
-            Step(
-                name='Knapsack Allocation',
-                widgets=[
-                    KnapsackAllocationWeightPieChart(),
-                    SimpleGrid(KnapsackItem)
+        step_groups.append(
+            generate_ui_step_group(
+                'Preview', [('Map', [GoogleMapsWidget()])]
+            )
+        )
+        step_groups.append(
+            generate_ui_step_group(
+                'Solve', [('Solve Priority Wish list', [ExecuteLocalSolver()])]
+            )
+        )
+        step_groups.append(
+            generate_ui_step_group(
+                'See Solution', [
+                    (
+                        'Prioritised Wish List',
+                        [
+                            KnapsackAllocationWeightPieChart(),
+                            SimpleGrid(KnapsackItem)
+                        ]
+                    )
                 ]
             )
         )
-
-        return [step_group1, step_group2, step_group3]
+        return step_groups
 
     def get_examples(self):
         return {

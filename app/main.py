@@ -3,7 +3,7 @@ import subprocess
 import pkg_resources
 
 from sqlalchemy.schema import Column
-from sqlalchemy.types import Boolean, Integer, Text
+from sqlalchemy.types import Boolean, Float, Integer, Text
 
 from tropofy.app import AppWithDataSets, Parameter, Step, StepGroup
 from tropofy.database.tropofy_orm import DataSetMixin
@@ -30,35 +30,21 @@ class KnapsackItem(DataSetMixin):
 
 
 class City(DataSetMixin):
-    name = Column(Text, nullable=False)
-    country = Column(Text, nullable=False)
+    name = Column('City Name', Text, nullable=False)
+    country = Column('Country', Text, nullable=False)
+    latitude = Column('Latitude', Float)
+    longitude = Column('Longitude', Float)
 
     # rankings (weights)
-    rank_coffee = Column(Integer, nullable=False)
-    rank_holiday = Column(Integer, nullable=False)
-    rank_working = Column(Integer, nullable=False)
+    rank_coffee = Column('Coffee Rank', Integer, nullable=False)
+    rank_holiday = Column('Holiday Rank', Integer, nullable=False)
+    rank_working = Column('Working Rank', Integer, nullable=False)
 
     # costs
-    acommodation_cost_per_day = Column(Integer, nullable=False)
-    living_cost_per_day = Column(Integer, nullable=False)
+    cost_per_day = Column('Cost per day', Float, nullable=False)
 
     # easily remove places not wanting to visit
-    in_wishlist = Column(Boolean, nullable=False)
-
-    def __init__(
-            self, name, country, rank_coffee, rank_holiday, rank_working,
-            acommodation_cost_per_day, living_cost_per_day, in_wishlist=True):
-        self.name = name
-        self.country = country
-
-        self.rank_coffee = rank_coffee
-        self.rank_holiday = rank_holiday
-        self.rank_working = rank_working
-
-        self.acommodation_cost_per_day = acommodation_cost_per_day
-        self.living_cost_per_day = living_cost_per_day
-
-        self.in_wishlist = in_wishlist
+    # in_wishlist = Column(Boolean, nullable=False)
 
     @classmethod
     def get_ordered_list_of_all_items(cls, data_set):
@@ -70,7 +56,20 @@ class Preferences(DataSetMixin):
     priority_holiday = Column(Integer, nullable=False)
     priority_working = Column(Integer, nullable=False)
     places_to_visit = Column(Integer, nullable=False)
-    budget_per_day = Column(Integer, nullable=False)
+    budget_per_day = Column(Float, nullable=False)
+
+
+# Loading Data
+
+def load_data_set_cities(app_session):
+    app_session.data_set.add_all([
+        City(name='Brisbane', country='Australia', rank_coffee=90,
+             rank_holiday=50, rank_working=70, cost_per_day=130.00,
+             latitude=42.000, longitude=153.000),
+        City(name='Sydney', country='Australia', rank_coffee=90,
+             rank_holiday=60, rank_working=70, cost_per_day=150.00,
+             latitude=42.000, longitude=153.000),
+    ])
 
 
 # Widgets
@@ -136,6 +135,8 @@ class Application(AppWithDataSets):
     def get_gui(self):
         step_group1 = StepGroup(name='Enter your Data')
         step_group1.add_step(
+            Step(name='Cities', widgets=[SimpleGrid(City)]))
+        step_group1.add_step(
             Step(name='Knapsack Items', widgets=[SimpleGrid(KnapsackItem)]))
         step_group1.add_step(Step(
             name='Knapsack Weight',
@@ -165,8 +166,7 @@ class Application(AppWithDataSets):
 
     def get_examples(self):
         return {
-            "Demo French Shopping Knapsack": load_data_set_toy,
-            "Demo 100 Item Knapsack": load_data_set_100,
+            'Demo - LB 2017 Cities': load_data_set_cities,
         }
 
     def get_parameters(self):
@@ -184,7 +184,7 @@ class Application(AppWithDataSets):
         return "Demo French Shopping Knapsack"
 
     def get_icon_url(self):
-        return "/{}/static/{}/knapsack.png".format(
+        return "/{}/static/{}/logo.png".format(
             self.url_name,
             self.get_app_version(),
         )

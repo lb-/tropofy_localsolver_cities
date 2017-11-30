@@ -8,7 +8,8 @@ from sqlalchemy.types import Boolean, Float, Integer, Text
 
 from tropofy.app import AppWithDataSets, Parameter, Step, StepGroup
 from tropofy.database.tropofy_orm import DataSetMixin
-from tropofy.widgets import Chart, CustomWidget, ExecuteFunction, ParameterForm, SimpleGrid
+from tropofy.widgets import (
+    Chart, CustomWidget, ExecuteFunction, ParameterForm, SimpleGrid)
 
 
 # Models
@@ -136,14 +137,21 @@ class KnapsackAllocationWeightPieChart(Chart):
 
 
 class GoogleMapsWidget(CustomWidget):
-    def serialise(self, app_session):
-        # https://docs.tropofy.com/narrative/customisation.html#example
-        print('generating mapps widget')
+    def custom_static_content_locations(self):
         return {
             "js": "google-maps-widget.js",
             "html": "google-maps-widget.html"
-            # custom keys are passed to params.spec in JS
         }
+
+    def _serialise(self, app_session):
+        """Override internal method to resolve error when concat type."""
+        # type: (AppSession) -> Dict[str, Any]
+        d = super(CustomWidget, self)._serialise(app_session)
+        # this line was causing issues, trying to contatenate type(self)
+        # added .__name__ to end
+        d.update({"componentName": d['componentName'] + type(self).__name__})
+        d.update(self.page_load_serialise())
+        return d
 
 
 # Helper Functions

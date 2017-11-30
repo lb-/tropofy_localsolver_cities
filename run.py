@@ -1,6 +1,10 @@
+import logging
+
 import keys
 
 from tropofy import main as tropofy_main, serve_app_cascade
+
+logging.basicConfig()
 
 apps_config = {
     'tropofy': {
